@@ -28,18 +28,17 @@ function UsersDAO(db) {
             user['email'] = email;
         }
 
-        // TODO: hw2.3
-        // The reason we don't pass the callback from sessions.js to this function
-        // but this whole other function, is because we pass back inserted[0]
-        // not just inserted. Cannot use inserted[0] if inserted is null/undefined
-        users.insert(user, function(err, inserted) {
-            "use strict"
-            if (err) {
-                return callback(err, null);
+        users.insert(user, function (err, result) {
+            "use strict";
+
+            if (!err) {
+                console.log("Inserted new user");
+                return callback(null, result[0]);
             }
-            return callback(null, inserted[0]);
+
+            return callback(err, null);
         });
-    };
+    }
 
     this.validateLogin = function(username, password, callback) {
         "use strict";
@@ -69,11 +68,7 @@ function UsersDAO(db) {
             }
         }
 
-        // TODO: hw2.3
-        // Get the user object from the DB and pass the err and object to validateUserDoc cb
-        users.findOne({'_id': username},validateUserDoc);
-        // second parameter to findOne is a callback that gets called on completion of the query.
-        
+        users.findOne({ '_id' : username }, validateUserDoc);
     }
 }
 
