@@ -30,7 +30,12 @@ function PostsDAO(db) {
 
         // now insert the post
         // hw3.2 TODO
-        callback(Error("insertEntry NYI"), null);
+        // callback(Error("insertEntry NYI"), null);
+        posts.insert(post, function(err, inserted) {
+            "use strict"
+            if(err) return callback(err, null);
+            return callback(null, post.permalink);
+        });
     }
 
     this.getPosts = function(num, callback) {
@@ -82,7 +87,19 @@ function PostsDAO(db) {
         }
 
         // hw3.3 TODO
-        callback(Error("addComment NYI"), null);
+        // callback(Error("addComment NYI"), null);
+        var query = {"permalink" : permalink};
+        posts.findOne(query, function(err, doc) {
+            if(err) return callback(err, null);
+            console.log(doc);
+            var commentsArray = doc.comments;
+            commentsArray.push(comment);
+            var operator = { $set : {"comments" : commentsArray}};
+            posts.update(query, operator, function(err, updated) {
+                if (err) return callback(err, null);
+                return callback(null, updated);
+            });       
+        });        
     }
 }
 
