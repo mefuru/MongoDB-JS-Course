@@ -42,7 +42,7 @@ function PostsDAO(db) {
 
     this.getPosts = function(num, callback) {
         "use strict";
-
+        
         posts.find().sort('date', -1).limit(num).toArray(function(err, items) {
             "use strict";
 
